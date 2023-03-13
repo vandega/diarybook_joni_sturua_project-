@@ -1,12 +1,15 @@
 import sys
 
-from diarybook import Diary, DiaryBook
+from diarybook import DiaryBook
 from util import read_from_json_into_application
 
 
 class Menu:
 
-    def __init__(self):
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
         self.diarybook = DiaryBook()
 
         self.choices = {
@@ -19,13 +22,14 @@ class Menu:
 
     def display_menu(self):
         print(""" 
-                     Notebook Menu  
-                    1. Show diaries
-                    2. Add diary
-                    3. Search diaries
-                    4. Populate database
-                    5. Quit program
-                    """)
+        |============[ NOTEBOOK MENU ]===========|  
+        |   SHOW DIARIES --------------- [ 1 ]   |
+        |   ADD DEARY ------------------ [ 2 ]   |
+        |   SEARCH DIARIES ------------- [ 3 ]   |
+        |   Populate database ---------- [ 4 ]   |
+        |   QUIT ----------------------- [ 5 ]   |
+        |========================================|
+        """)
 
     def run(self):
         while True:
@@ -44,9 +48,16 @@ class Menu:
             print(f"{diary.id}-{diary.memo}")
 
     def add_diary(self):
-        memo = input("Enter a memo:         ")
-        tags = input("add tags:             ")
-        self.diarybook.new_diary(memo, tags)
+        print(self.username, self.password)
+
+        with open(f'Data_base/{self.username}.txt', 'a') as textfile:
+            textfile.write((str(input())))
+            textfile.write('\n')
+            print('For tags use [ , ]\nTags :', end="")
+            textfile.write((str(input())))
+            textfile.write('\n\n')
+
+        # self.diarybook.new_diary(memo, tags)
         print("Your note has been added")
 
     def search_diaries(self):
@@ -56,8 +67,8 @@ class Menu:
         for diary in diaries:
             print(f"{diary.id}-{diary.memo}")
 
-    def quit(self):
-
+    @staticmethod
+    def quit():
         print("Thank you for using diarybook today")
         sys.exit(0)
 

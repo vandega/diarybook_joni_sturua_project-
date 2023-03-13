@@ -1,6 +1,5 @@
 import datetime
 
-
 class Diary:
     last_id = 0
 
