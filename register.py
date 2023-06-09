@@ -57,7 +57,7 @@ class Register:
 
             data.append({"username": str(self.username), "password": str(self.password)})
             with open("Data_base/User_pass.json", 'w') as update:
-                json.dump(data, update)
+                json.dump(data, update, indent=4)
 
             personal_file = f"Data_base/{self.username}.txt"
 

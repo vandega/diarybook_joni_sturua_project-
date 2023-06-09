@@ -1,7 +1,8 @@
 import sys
-
 from diarybook import DiaryBook
 from util import read_from_json_into_application
+import json
+import os
 
 
 class Menu:
@@ -20,7 +21,8 @@ class Menu:
             '5': self.quit
         }
 
-    def display_menu(self):
+    @staticmethod
+    def display_menu():
         print(""" 
         |============[ NOTEBOOK MENU ]===========|  
         |   SHOW DIARIES --------------- [ 1 ]   |
@@ -41,31 +43,60 @@ class Menu:
             else:
                 print("{0} is not a valid choice".format(choice))
 
-    def show_diaries(self, diaries=None):
-        if not diaries:
-            diaries = self.diarybook.diaries
-        for diary in diaries:
-            print(f"{diary.id}-{diary.memo}")
+    def show_diaries(self):
+        file_path = f'Data_base/{self.username}.json'
+
+        if os.path.exists(file_path):
+            with open(file_path, 'r') as file:
+                context = json.load(file)
+                for diary in context:
+                    print(diary)
+
+        else:
+            print('no diary')
+
 
     def add_diary(self):
         print(self.username, self.password)
 
-        with open(f'Data_base/{self.username}.txt', 'a') as textfile:
-            textfile.write((str(input())))
-            textfile.write('\n')
-            print('For tags use [ , ]\nTags :', end="")
-            textfile.write((str(input())))
-            textfile.write('\n\n')
+        text = str(input('text: '))
+        tag = str(input("tag: "))
 
-        # self.diarybook.new_diary(memo, tags)
-        print("Your note has been added")
+        data = [{'text': text, 'tag': tag}]
+
+        file_path = f'/home/user/Desktop/diarybook_joni_sturua_project-/Data_base/{self.username}.json'
+
+        if os.path.exists(file_path):
+            print('if')
+            with open(file_path, 'r') as file:
+                existing_data = json.load(file)
+
+        else:
+            print('else')
+            existing_data = []
+
+        existing_data.extend(data)
+
+        with open(file_path, 'w') as file:
+            json.dump(existing_data, file, indent=4)
+
+        print('added successfully ')
 
     def search_diaries(self):
 
-        filter_text = input("Search for:  ")
-        diaries = self.diarybook.search_diary(filter_text)
-        for diary in diaries:
-            print(f"{diary.id}-{diary.memo}")
+        # filter_text = input("Search for:  ")
+        # diaries = self.diarybook.search_diary(filter_text)
+        # for diary in diaries:
+        #     print(f"{diary.id}-{diary.memo}")
+
+        search = str(input("search: "))
+        # now it opens file for current user and dinds in its personal file:
+        with open(f'Data_base/{self.username}.json', 'r') as file:
+            data = json.load(file)
+            for i in data:
+                if search in i['text'] or search in i['tag']:
+                    print(i)
+
 
     @staticmethod
     def quit():

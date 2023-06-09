@@ -16,7 +16,7 @@ class Registration:
             for user in data:
                 if (user['username'] == username) and (user['password'] == password):
                     print(f"[ {username}'s diary ]".center(70, '-'))
-                    Menu().run()
+                    Menu(username, password).run()
 
                 elif (user['username'] == username) and (user['password'] != password):
                     print('password not correct, try log in again')
@@ -59,9 +59,12 @@ class Registration:
     @staticmethod
     def Registration_menu():
         print("""
+            ==================================
             For registration press ----- [ R ]
             For sign_in press ---------- [ S ]
             Incognito ------------------ [ I ]
+            ==================================
+            ======== !!! WORNING !!!  ========
             
             [ Incognito diary not secured and may be lost ]
         """)
